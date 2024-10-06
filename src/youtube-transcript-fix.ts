@@ -4,9 +4,7 @@ import { parse } from 'node-html-parser';
 
 const RE_YOUTUBE =
   /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
-const USER_AGENT =
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36,gzip(gfe)';
-
+  const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
 class YoutubeTranscriptError extends Error {
   constructor(message: string) {
     super(`[YoutubeTranscript] ${message}`);
@@ -35,10 +33,11 @@ class YoutubeTranscript {
     try {
       const transcriptUrl = await fetch(
         `https://www.youtube.com/watch?v=${identifier}&key=${process.env.NEXT_APP_GOOGLE_API_KEY}`,
-        // `https://www.googleapis.com/youtube/v3/captions?videoId=${identifier}&key=${process.env.NEXT_APP_GOOGLE_API_KEY}`,
         {
           headers: {
             'User-Agent': USER_AGENT,
+            'Cookie': 'CONSENT=YES+; PATH=/; DOMAIN=.youtube.com',
+            'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7'
           },
         }
       )
